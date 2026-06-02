@@ -32,15 +32,6 @@ void adc_init(void)
     ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_handle, ADC_CHANNEL_R, &chan_cfg));
 }
 
-void joystick_read(int *x, int *y)
-{
-    int raw;
-    adc_oneshot_read(adc_handle, ADC_CHANNEL_L, &raw);
-    *x = raw;
-    adc_oneshot_read(adc_handle, ADC_CHANNEL_R, &raw);
-    *y = raw;
-}
-
 /* 将原始ADC值映射到 -OUTPUT_MAX ~ OUTPUT_MAX，带死区 */
 static int map_adc(int raw)
 {

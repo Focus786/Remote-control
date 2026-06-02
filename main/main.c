@@ -18,18 +18,14 @@ void app_main(void)
         int throttle = joystick_get_throttle();
         int steering = joystick_get_steering();
 
-        int motor_l, motor_r;
-        differential_mix(throttle, steering, &motor_l, &motor_r);
-
-        uint16_t pwm_l = motor_to_pwm(motor_l);
-        uint16_t pwm_r = motor_to_pwm(motor_r);
-        espnow_send(pwm_l, pwm_r);
+        uint16_t throttle_us = motor_to_pwm(throttle);
+        uint16_t steering_us = motor_to_pwm(steering);
+        espnow_send(throttle_us, steering_us);
 
         if (++tick >= 25) {
             tick = 0;
-            ESP_LOGI(TAG, "THR:%d STR:%d | L:%d(%dus) R:%d(%dus)",
-                     throttle, steering,
-                     motor_l, pwm_l, motor_r, pwm_r);
+            ESP_LOGI(TAG, "THR:%d(%dus) STR:%d(%dus)",
+                     throttle, throttle_us, steering, steering_us);
         }
 
         vTaskDelay(pdMS_TO_TICKS(20)); // 50Hz
