@@ -8,7 +8,7 @@
 #define TAG "ESPNOW"
 
 /* 接收端 MAC 地址，按实际修改 */
-static const uint8_t RX_MAC[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static const uint8_t RX_MAC[] = {0x28, 0x84, 0x85, 0x48, 0x47, 0x7c};
 
 typedef struct {
     uint16_t throttle_us;

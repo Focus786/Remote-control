@@ -2,8 +2,8 @@
 
 
 #define ADC_UNIT        ADC_UNIT_1
-#define ADC_CHANNEL_L   ADC_CHANNEL_6       // 油门
-#define ADC_CHANNEL_R   ADC_CHANNEL_7       // 转向
+#define ADC_CHANNEL_L   ADC_CHANNEL_3       // 油门
+#define ADC_CHANNEL_R   ADC_CHANNEL_6       // 转向
 #define ADC_ATTEN       ADC_ATTEN_DB_12     // 0 ~ ~2900 mV
 #define ADC_BITWIDTH    ADC_BITWIDTH_DEFAULT // 12 位 (0 ~ 4095)
 
