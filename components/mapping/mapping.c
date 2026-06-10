@@ -1,17 +1,20 @@
 #include "mapping.h"
 
-static int clamp(int val, int min, int max)
+void differential_drive(int throttle, int steering, int *left_out, int *right_out)
 {
-    if (val > max) return max;
-    if (val < min) return min;
-    return val;
+    int left  = throttle + steering;
+    int right = throttle - steering;
+
+    /* 限制在 ±OUTPUT_MAX 范围内（joystick 层已限制为 ±30） */
+    if (left > Limit_Positive)   left = Limit_Positive;
+    if (left < Limit_Negative)  left = Limit_Negative;
+    if (right > Limit_Positive)  right = Limit_Positive;
+    if (right < Limit_Negative) right = Limit_Negative;
+
+    *left_out  = left;
+    *right_out = right;
 }
 
-void differential_mix(int throttle, int steering, int *motor_l, int *motor_r)
-{
-    *motor_l = clamp(throttle + steering, -100, 100);
-    *motor_r = clamp(throttle - steering, -100, 100);
-}
 
 int motor_to_pwm(int motor_val)
 {

@@ -8,11 +8,11 @@
 #define TAG "ESPNOW"
 
 /* 接收端 MAC 地址，按实际修改 */
-static const uint8_t RX_MAC[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static const uint8_t RX_MAC[] = {0x28, 0x84, 0x85, 0x48, 0x47, 0x7c};
 
 typedef struct {
-    uint16_t motor_l_us;
-    uint16_t motor_r_us;
+    uint16_t throttle_us;
+    uint16_t steering_us;
 } __attribute__((packed)) espnow_data_t;
 
 static void send_cb(const esp_now_send_info_t *tx_info, esp_now_send_status_t status)
@@ -43,11 +43,14 @@ void espnow_init(void)
     ESP_ERROR_CHECK(esp_now_add_peer(&peer));
 }
 
-void espnow_send(uint16_t motor_l_us, uint16_t motor_r_us)
+void espnow_send(uint16_t throttle_us, uint16_t steering_us)
 {
     espnow_data_t data = {
-        .motor_l_us = motor_l_us,
-        .motor_r_us = motor_r_us,
+        .throttle_us = throttle_us,
+        .steering_us = steering_us,
     };
-    esp_now_send(RX_MAC, (uint8_t *)&data, sizeof(data));
+    esp_err_t ret = esp_now_send(RX_MAC, (uint8_t *)&data, sizeof(data));
+    if (ret != ESP_OK) {
+        ESP_LOGW(TAG, "esp_now_send failed: %s", esp_err_to_name(ret));
+    }
 }

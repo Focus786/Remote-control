@@ -7,6 +7,9 @@
 
 #define TAG "MAIN"
 
+int Limit_Positive = 30;
+int Limit_Negative = -30;
+
 void app_main(void)
 {
     adc_init();
@@ -15,21 +18,20 @@ void app_main(void)
     int tick = 0;
 
     while (1) {
-        int throttle = joystick_get_throttle();
-        int steering = joystick_get_steering();
+        int throttle = joystick_get_throttle();   // 范围 ±30
+        int steering = joystick_get_steering();   // 范围 ±30
 
-        int motor_l, motor_r;
-        differential_mix(throttle, steering, &motor_l, &motor_r);
+        int left_val, right_val;
+        differential_drive(throttle, steering, &left_val, &right_val);
 
-        uint16_t pwm_l = motor_to_pwm(motor_l);
-        uint16_t pwm_r = motor_to_pwm(motor_r);
-        espnow_send(pwm_l, pwm_r);
+        uint16_t throttle_us = motor_to_pwm(left_val);
+        uint16_t steering_us = motor_to_pwm(right_val);
+        espnow_send(throttle_us, steering_us);
 
         if (++tick >= 25) {
             tick = 0;
             ESP_LOGI(TAG, "THR:%d STR:%d | L:%d(%dus) R:%d(%dus)",
-                     throttle, steering,
-                     motor_l, pwm_l, motor_r, pwm_r);
+                     throttle, steering, left_val, throttle_us, right_val, steering_us);
         }
 
         vTaskDelay(pdMS_TO_TICKS(20)); // 50Hz
