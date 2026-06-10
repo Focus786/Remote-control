@@ -2,15 +2,15 @@
 
 
 #define ADC_UNIT        ADC_UNIT_1
-#define ADC_CHANNEL_L   ADC_CHANNEL_6       // 油门
-#define ADC_CHANNEL_R   ADC_CHANNEL_7       // 转向
+#define ADC_CHANNEL_L   ADC_CHANNEL_3       // 油门
+#define ADC_CHANNEL_R   ADC_CHANNEL_6       // 转向
 #define ADC_ATTEN       ADC_ATTEN_DB_12     // 0 ~ ~2900 mV
 #define ADC_BITWIDTH    ADC_BITWIDTH_DEFAULT // 12 位 (0 ~ 4095)
 
 #define ADC_MAX         4095
 #define ADC_CENTER      (ADC_MAX / 2)       // 2047
 #define DEAD_ZONE       200                 // 死区阈值
-#define OUTPUT_MAX      100                 // 输出范围 ±100
+#define OUTPUT_MAX      30                  // 输出范围 ±30 (30%速度上限)
 
 static adc_oneshot_unit_handle_t adc_handle;
 
@@ -32,15 +32,6 @@ void adc_init(void)
     ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_handle, ADC_CHANNEL_R, &chan_cfg));
 }
 
-void joystick_read(int *x, int *y)
-{
-    int raw;
-    adc_oneshot_read(adc_handle, ADC_CHANNEL_L, &raw);
-    *x = raw;
-    adc_oneshot_read(adc_handle, ADC_CHANNEL_R, &raw);
-    *y = raw;
-}
-
 /* 将原始ADC值映射到 -OUTPUT_MAX ~ OUTPUT_MAX，带死区 */
 static int map_adc(int raw)
 {
@@ -56,14 +47,22 @@ static int map_adc(int raw)
 
 int joystick_get_throttle(void)
 {
-    int raw;
-    adc_oneshot_read(adc_handle, ADC_CHANNEL_L, &raw);
+    int raw = ADC_CENTER;
+    esp_err_t ret = adc_oneshot_read(adc_handle, ADC_CHANNEL_L, &raw);
+    if (ret != ESP_OK) {
+        ESP_LOGW("JOYSTICK", "ADC read throttle failed: %s", esp_err_to_name(ret));
+        return 0;
+    }
     return map_adc(raw);
 }
 
 int joystick_get_steering(void)
 {
-    int raw;
-    adc_oneshot_read(adc_handle, ADC_CHANNEL_R, &raw);
+    int raw = ADC_CENTER;
+    esp_err_t ret = adc_oneshot_read(adc_handle, ADC_CHANNEL_R, &raw);
+    if (ret != ESP_OK) {
+        ESP_LOGW("JOYSTICK", "ADC read steering failed: %s", esp_err_to_name(ret));
+        return 0;
+    }
     return map_adc(raw);
 }

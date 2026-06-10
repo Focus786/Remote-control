@@ -9,8 +9,8 @@
 #include "esp_adc/adc_cali_scheme.h"
 
 void adc_init(void);
-void joystick_read(int *x, int *y);
 int  joystick_get_throttle(void);
 int  joystick_get_steering(void);
 
 #endif
+
