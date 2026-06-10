@@ -10,7 +10,7 @@
 #define ADC_MAX         4095
 #define ADC_CENTER      (ADC_MAX / 2)       // 2047
 #define DEAD_ZONE       200                 // 死区阈值
-#define OUTPUT_MAX      30                  // 输出范围 ±30 (30%速度上限)
+
 
 static adc_oneshot_unit_handle_t adc_handle;
 
