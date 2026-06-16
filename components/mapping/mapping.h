@@ -6,8 +6,9 @@
 #define PWM_MAX_US  2000
 
 
-extern int Limit_Positive;
-extern int Limit_Negative;
+extern const int Limit_Positive;
+extern const int Limit_Negative;
+extern const int OUTPUT_MAX;
 
 int  motor_to_pwm(int motor_val);
 void differential_drive(int throttle, int steering, int *left_out, int *right_out);

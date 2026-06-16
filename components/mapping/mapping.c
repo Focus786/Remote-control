@@ -5,7 +5,7 @@ void differential_drive(int throttle, int steering, int *left_out, int *right_ou
     int left  = throttle + steering;
     int right = throttle - steering;
 
-    /* 限制在 ±OUTPUT_MAX 范围内（joystick 层已限制为 ±30） */
+    /* 限制在 Limit_Positive / Limit_Negative 范围内 */
     if (left > Limit_Positive)   left = Limit_Positive;
     if (left < Limit_Negative)  left = Limit_Negative;
     if (right > Limit_Positive)  right = Limit_Positive;

@@ -7,8 +7,11 @@
 
 #define TAG "MAIN"
 
-int Limit_Positive = 30;
-int Limit_Negative = -30;
+
+const int OUTPUT_MAX = 30;
+const int Limit_Positive = OUTPUT_MAX;
+const int Limit_Negative = -OUTPUT_MAX;
+
 
 void app_main(void)
 {

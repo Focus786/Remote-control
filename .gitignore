@@ -1,4 +1,4 @@
-    # macOS
+# macOS
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -71,8 +71,12 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
+# IDE
+.vscode/
+
 # User-specific configuration files
 *.user
 *.workspace # General workspace files, can be from various tools
 *.suo       # Visual Studio Solution User Options
 *.sln.docstates # Visual Studio
+
